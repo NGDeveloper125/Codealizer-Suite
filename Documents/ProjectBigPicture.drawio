@@ -1,0 +1,46 @@
+<mxfile host="65bd71144e">
+    <diagram id="hq3NnFDGRi-HAj8YCA3x" name="Page-1">
+        <mxGraphModel dx="1410" dy="1113" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Codealizer" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=45;" vertex="1" parent="1">
+                    <mxGeometry x="413" y="10" width="270" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=4;" edge="1" parent="1" source="3" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Codebase" style="rounded=0;whiteSpace=wrap;html=1;fontSize=25;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="143" y="360" width="185" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Load local codebase" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
+                    <mxGeometry x="156.75" y="260" width="157.5" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=4;" edge="1" parent="1" source="5" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Configurations" style="rounded=0;whiteSpace=wrap;html=1;fontSize=25;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+                    <mxGeometry x="443" y="360" width="200" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Configure what to include in the model" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
+                    <mxGeometry x="453" y="255" width="190" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Model" style="rounded=0;whiteSpace=wrap;html=1;fontSize=25;fillColor=#d5e8d4;gradientColor=#97d077;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="763" y="360" width="195" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Render 3d model" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
+                    <mxGeometry x="780.5" y="265" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Step 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;fillColor=#FFB366;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="175.5" y="180" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Step 2" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;fillColor=#FFB366;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="503" y="180" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="Step 3" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;fillColor=#FFB366;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="800.5" y="180" width="120" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
