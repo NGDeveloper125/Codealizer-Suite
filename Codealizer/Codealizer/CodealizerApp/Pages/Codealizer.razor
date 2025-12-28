@@ -1,9 +1,19 @@
-﻿@layout MainLayout
+﻿@using CodealizerApp.Components
+@using CodealizerApp.Models
+@layout MainLayout
 
 @page "/"
 
-<PageTitle>Home</PageTitle>
+<div class="App-sections">
+    <div class="control-panel">
+        <ControlPanel ControlPanelState="@controlPanelState"/>
+    </div>
+    <div class="model-area">
+        <ModelArea />
+    </div>
+</div>
 
-<h1>Hello, world!</h1>
+@code {
+    private ControlPanelState controlPanelState = ControlPanelState.LoadCodebase;
+}
 
-Welcome to your new app.

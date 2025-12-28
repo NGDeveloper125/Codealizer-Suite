@@ -1,0 +1,83 @@
+﻿@inject IJSRuntime JSRuntime
+@using CodealizerApp.Models
+@using System.Threading.Tasks
+
+
+<div class="control-panel-container">
+<h3>Model Settings</h3>
+
+@if (ControlPanelState == ControlPanelState.NotInitilized)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    @switch (ControlPanelState)
+    {
+        case ControlPanelState.LoadCodebase:
+                <h4 class="control-panel-state-load-codebase-title">Load codebase</h4>
+            <p>@codebasePath</p>
+            <div class="loading-codebase-buttons-container">
+                    <InputFile OnChange="HandleFolderSelection" webkitdirectory directory multiple style="display:none" @ref="inputFile" />
+                    <button class="loading-codebase-button" @onclick="LocateFiles">Search Folder</button>
+                    <button class="loading-codebase-button" @onclick="LoadCodebase" disabled="@codebaseSelected">Load</button>
+            </div>
+            break;
+        case ControlPanelState.Render:
+            <EditForm>
+
+            </EditForm>
+            break;
+        case ControlPanelState.Rerender:
+            <EditForm>
+
+            </EditForm>
+            break;
+    }
+}
+</div>
+
+@code {
+    [Parameter] public ControlPanelState ControlPanelState { get; set; } = ControlPanelState.NotInitilized;
+    private InputFile? inputFile;
+    private List<IBrowserFile> selectedFiles = new();
+    private string codebasePath = "codebase path";
+    bool codebaseSelected => selectedFiles.Any();
+
+    private async Task LocateFiles(MouseEventArgs e)
+    {
+        if(inputFile is not null)
+        {
+            await JSRuntime.InvokeVoidAsync("eval", "document.querySelector('input[type=file]').click()");
+        }
+    }
+
+    private async Task HandleFolderSelection(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles(int.MaxValue).ToList();
+
+        if (selectedFiles.Any())
+        {
+            try
+            {
+                var fullPath = await JSRuntime.InvokeAsync<string>("getDirectoryPath");
+                codebasePath = fullPath ?? "Path unavailable";
+            }
+            catch
+            {
+                var topFolder = selectedFiles.First().Name.Split('.').First();
+                codebasePath = topFolder;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadCodebase()
+    {
+        foreach (var file in selectedFiles)
+        {
+            
+        }
+    }
+}
