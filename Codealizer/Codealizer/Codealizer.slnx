@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="CodealizerApp/CodealizerApp.csproj" />
   <Project Path="CodealizerDomain/CodealizerDomain.csproj" Id="b1e6ffc8-772b-4c97-8ba8-0b30fcdede4f" />
+  <Project Path="CodealizerTests/CodealizerTests.csproj" Id="3980bf0b-f993-4bf1-bf90-c0d33c4e962e" />
 </Solution>

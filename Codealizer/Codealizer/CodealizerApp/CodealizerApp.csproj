@@ -16,4 +16,8 @@
     <Folder Include="Shared\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CodealizerDomain\CodealizerDomain.csproj" />
+  </ItemGroup>
+
 </Project>
