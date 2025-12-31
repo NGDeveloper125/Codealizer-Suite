@@ -1,6 +1,10 @@
 ﻿@inject IJSRuntime JSRuntime
+@using CodealizerApp.Handlers
 @using CodealizerApp.Models
 @using System.Threading.Tasks
+@using CodealizerDomain.GeneralModels
+@using CodealizerDomain.Models
+@using CodealizerDomain.Services
 
 
 <div class="control-panel-container">
@@ -42,7 +46,8 @@ else
     private InputFile? inputFile;
     private List<IBrowserFile> selectedFiles = new();
     private string codebasePath = "codebase path";
-    bool codebaseSelected => selectedFiles.Any();
+    bool codebaseSelected => !selectedFiles.Any();
+    private CodebaseModel codebaseModel = new();
 
     private async Task LocateFiles(MouseEventArgs e)
     {
@@ -75,9 +80,22 @@ else
 
     private async Task LoadCodebase()
     {
-        foreach (var file in selectedFiles)
+        foreach (var file in selectedFiles.Where(f => f.Name.EndsWith(".cs")))
         {
-            
+            Result<string?> fileContentResult = await FileContentHandler.ReadFileContentAsync(file);
+            if (!fileContentResult.IsSuccess)
+            {
+                // open dialog box with error
+                return;
+            }
+
+            Result<CodebaseModel> buildCodebaseResult = CodebaseModelService.BuildCodebaseModel(fileContentResult.Data!, codebaseModel);
+            if (!buildCodebaseResult.IsSuccess)
+            {
+                // open dialog box with error
+                return;
+            }
         }
+        ControlPanelState = ControlPanelState.Render;
     }
 }
