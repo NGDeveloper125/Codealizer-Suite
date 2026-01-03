@@ -1,0 +1,95 @@
+﻿@using CodealizerApp.Models
+@using CodealizerDomain.Extensions
+@using CodealizerDomain.Models
+
+<div class="model-settings-container">
+    <h4 class="model-settings-title">Show In Model:</h4>
+    <label class="model-settings-method-checkbox">
+        <input type="checkbox" @bind="modelSettings.ShowPublicMethods" />
+        <span>Public Methods</span>
+    </label>
+    <label class="model-settings-method-checkbox">
+        <input type="checkbox" @bind="modelSettings.ShowPrivateMethods" />
+        <span>Private Methods</span>
+    </label>
+    <div class="model-settings-projects-container">
+        <p>Projects & Classes:</p>
+        @foreach (string project in codebaseModel.GetProjects())
+        {
+            <label class="model-settings-project-checkbox">
+                <input type="checkbox"
+                        checked="@projectsCheckboxStates[project]"
+                        @onchange="@(() => UpdateModelSettingsProjects(project))" />
+                <span>@project</span>
+            </label>
+            @if(projectsCheckboxStates[project])
+            {
+                @foreach (string className in codebaseModel.Classes.GetClassesByProject(project))
+                {
+                    <label class="model-settings-class-checkbox">
+                        <input type="checkbox"
+                                checked="@classesCheckboxStates[className]"
+                                @onchange="@(() => UpdateModelSettingsClasses(className))" />
+                        <span>@className</span>
+                    </label>
+                }
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public ModelSettings modelSettings { get; set; } = new();
+    [Parameter] public CodebaseModel codebaseModel { get; set; } = new();
+    Dictionary<string, bool> projectsCheckboxStates = new();
+    Dictionary<string, bool> classesCheckboxStates = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        projectsCheckboxStates.Clear();
+        foreach (string project in codebaseModel.GetProjects())
+        {
+            projectsCheckboxStates.Add(project, !modelSettings.ProjectsNotToShow.Contains(project));
+        }
+
+        classesCheckboxStates.Clear();
+        foreach (ClassModel classModel in codebaseModel.Classes)
+        {
+            classesCheckboxStates.Add(classModel.ClassName, !modelSettings.ClassesNotToShow.Contains(classModel.ClassName));
+        }
+    }
+
+    private void UpdateModelSettingsProjects(string projectName)
+    {
+        projectsCheckboxStates[projectName] = !projectsCheckboxStates[projectName];
+
+        if (projectsCheckboxStates[projectName])
+        {
+            modelSettings.ProjectsNotToShow.Remove(projectName);
+            foreach (string className in codebaseModel.Classes.GetClassesByProject(projectName))
+            {
+                modelSettings.ClassesNotToShow.Remove(className);
+                classesCheckboxStates[className] = true;
+            }
+        }
+        else
+        {
+            modelSettings.ProjectsNotToShow.Add(projectName);
+        }
+    }
+
+    private void UpdateModelSettingsClasses(string className)
+    {
+        classesCheckboxStates[className] = !classesCheckboxStates[className];
+
+        if (classesCheckboxStates[className])
+        {
+            modelSettings.ClassesNotToShow.Remove(className);
+        }
+        else
+        {
+            modelSettings.ClassesNotToShow.Add(className);
+        }
+    }
+}

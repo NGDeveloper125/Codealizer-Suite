@@ -4,9 +4,6 @@ using CodealizerDomain.Services;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CodealizerTests;
 
@@ -35,6 +32,93 @@ public class ClassModelServiceTests
         Assert.NotNull(buildClassModelResult.Data!);
         Assert.Equal("TestClass", buildClassModelResult.Data!.ClassName);
         Assert.Equal("TestNamespace", buildClassModelResult.Data!.Namespace);
+        Assert.False(buildClassModelResult.Data!.IsAbstract);
+        Assert.False(buildClassModelResult.Data!.IsInterface);
+        Assert.False(buildClassModelResult.Data!.IsEnum);
+    }
+
+    [Fact]
+    public void BuildClassModel_ShouldReturnAClassModelWithAProjectName_WhenNameSpaceIsPassedIn()
+    {
+        // Given a valid TypeDeclarationSyntax representing a class
+        string classCode = @"
+            public class TestClass
+            {
+            }";
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(classCode);
+        BaseTypeDeclarationSyntax typeDeclaration = syntaxTree.GetRoot()
+            .DescendantNodes()
+            .OfType<BaseTypeDeclarationSyntax>()
+            .First();
+        string nameSpace = "TestNamespace";
+
+        // When BuildClassModel is called with the TypeDeclarationSyntax
+        Result<ClassModel> buildClassModelResult = ClassModelService.BuildClassModel(typeDeclaration, nameSpace);
+
+        // Then it should return a ClassModel representing the class
+        Assert.True(buildClassModelResult.IsSuccess);
+        Assert.NotNull(buildClassModelResult.Data!);
+        Assert.Equal("TestClass", buildClassModelResult.Data!.ClassName);
+        Assert.Equal("TestNamespace", buildClassModelResult.Data!.Namespace);
+        Assert.Equal("TestNamespace", buildClassModelResult.Data!.ProjectName);
+        Assert.False(buildClassModelResult.Data!.IsAbstract);
+        Assert.False(buildClassModelResult.Data!.IsInterface);
+        Assert.False(buildClassModelResult.Data!.IsEnum);
+    }
+
+    [Fact]
+    public void BuildClassModel_ShouldReturnAClassModelWithAnEmptyProjectName_WhenNameSpacePassedInIsEmptyOrNull()
+    {
+        // Given a valid TypeDeclarationSyntax representing a class
+        string classCode = @"
+            public class TestClass
+            {
+            }";
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(classCode);
+        BaseTypeDeclarationSyntax typeDeclaration = syntaxTree.GetRoot()
+            .DescendantNodes()
+            .OfType<BaseTypeDeclarationSyntax>()
+            .First();
+        string nameSpace = string.Empty;
+
+        // When BuildClassModel is called with the TypeDeclarationSyntax
+        Result<ClassModel> buildClassModelResult = ClassModelService.BuildClassModel(typeDeclaration, nameSpace);
+
+        // Then it should return a ClassModel representing the class
+        Assert.True(buildClassModelResult.IsSuccess);
+        Assert.NotNull(buildClassModelResult.Data!);
+        Assert.Equal("TestClass", buildClassModelResult.Data!.ClassName);
+        Assert.Equal(string.Empty, buildClassModelResult.Data!.Namespace);
+        Assert.Equal(string.Empty, buildClassModelResult.Data!.ProjectName);
+        Assert.False(buildClassModelResult.Data!.IsAbstract);
+        Assert.False(buildClassModelResult.Data!.IsInterface);
+        Assert.False(buildClassModelResult.Data!.IsEnum);
+    }
+
+    [Fact]
+    public void BuildClassModel_ShouldReturnAClassModelWithAProjectNameCutFromNameSpace_WhenNameSpacePassedInIsMoreThanProjectName()
+    {
+        // Given a valid TypeDeclarationSyntax representing a class
+        string classCode = @"
+            public class TestClass
+            {
+            }";
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(classCode);
+        BaseTypeDeclarationSyntax typeDeclaration = syntaxTree.GetRoot()
+            .DescendantNodes()
+            .OfType<BaseTypeDeclarationSyntax>()
+            .First();
+        string nameSpace = "TestNameSpace.Components";
+
+        // When BuildClassModel is called with the TypeDeclarationSyntax
+        Result<ClassModel> buildClassModelResult = ClassModelService.BuildClassModel(typeDeclaration, nameSpace);
+
+        // Then it should return a ClassModel representing the class
+        Assert.True(buildClassModelResult.IsSuccess);
+        Assert.NotNull(buildClassModelResult.Data!);
+        Assert.Equal("TestClass", buildClassModelResult.Data!.ClassName);
+        Assert.Equal("TestNameSpace.Components", buildClassModelResult.Data!.Namespace);
+        Assert.Equal("TestNameSpace", buildClassModelResult.Data!.ProjectName);
         Assert.False(buildClassModelResult.Data!.IsAbstract);
         Assert.False(buildClassModelResult.Data!.IsInterface);
         Assert.False(buildClassModelResult.Data!.IsEnum);
