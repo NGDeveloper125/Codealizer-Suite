@@ -2,10 +2,10 @@
 @using CodealizerApp.Handlers
 @using CodealizerApp.Models
 @using System.Threading.Tasks
+@using CodealizerDomain.Extensions
 @using CodealizerDomain.GeneralModels
 @using CodealizerDomain.Models
 @using CodealizerDomain.Services
-
 
 <div class="control-panel-container">
 <h3>Model Settings</h3>
@@ -19,18 +19,17 @@ else
     @switch (ControlPanelState)
     {
         case ControlPanelState.LoadCodebase:
-                <h4 class="control-panel-state-load-codebase-title">Load codebase</h4>
+            <h4 class="control-panel-state-load-codebase-title">Load codebase</h4>
             <p>@codebasePath</p>
             <div class="loading-codebase-buttons-container">
-                    <InputFile OnChange="HandleFolderSelection" webkitdirectory directory multiple style="display:none" @ref="inputFile" />
-                    <button class="loading-codebase-button" @onclick="LocateFiles">Search Folder</button>
-                    <button class="loading-codebase-button" @onclick="LoadCodebase" disabled="@codebaseSelected">Load</button>
+                <InputFile OnChange="HandleFolderSelection" webkitdirectory directory multiple style="display:none" @ref="inputFile" />
+                <button class="loading-codebase-button" @onclick="LocateFiles">Search Folder</button>
+                <button class="loading-codebase-button" @onclick="LoadCodebase" disabled="@codebaseSelected">Load</button>
             </div>
             break;
         case ControlPanelState.Render:
-            <EditForm>
-
-            </EditForm>
+            <ProjectsAndClassesContainer codebaseModel="@codebaseModel" modelSettings="@modelSettings" />
+            <button class="render-codebase-button" @onclick="() => RenderModel()">Render Model</button>
             break;
         case ControlPanelState.Rerender:
             <EditForm>
@@ -48,6 +47,7 @@ else
     private string codebasePath = "codebase path";
     bool codebaseSelected => !selectedFiles.Any();
     private CodebaseModel codebaseModel = new();
+    private ModelSettings modelSettings = new();
 
     private async Task LocateFiles(MouseEventArgs e)
     {
@@ -97,5 +97,12 @@ else
             }
         }
         ControlPanelState = ControlPanelState.Render;
+        StateHasChanged();
+    }
+
+    private void RenderModel()
+    {
+        ControlPanelState = ControlPanelState.Rerender;
+        StateHasChanged();
     }
 }

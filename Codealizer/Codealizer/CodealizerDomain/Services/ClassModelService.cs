@@ -1,12 +1,9 @@
-﻿using CodealizerDomain.GeneralModels;
+﻿using CodealizerDomain.Extensions;
+using CodealizerDomain.GeneralModels;
 using CodealizerDomain.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CodealizerDomain.Services;
 
@@ -49,6 +46,7 @@ public class ClassModelService
                 ClassId = Guid.NewGuid(),
                 ClassName = typeDecl.Identifier.Text,
                 Namespace = nameSpace,
+                ProjectName = nameSpace.ExtractProjectNameFromNameSpace(),
                 IsAbstract = typeDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.AbstractKeyword)),
                 IsInterface = typeDecl is InterfaceDeclarationSyntax,
                 IsEnum = typeDecl is EnumDeclarationSyntax,
